@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Spielverwaltung</title>
+<title>Spielbericht</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -30,7 +30,6 @@
     font-size: 14px;
   }
 
-  /* HEADER */
   .header {
     display: flex;
     align-items: center;
@@ -39,14 +38,10 @@
     margin-bottom: 16px;
     flex-wrap: wrap;
   }
-  .app-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    letter-spacing: 2px;
-    color: var(--accent1);
-  }
+  .app-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: var(--accent1); }
 
-  /* SCOREBOARD */
+  .top-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
   .scoreboard {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -79,34 +74,13 @@
   .team-name-edit:focus { border-bottom-color: var(--accent1); }
   .team1-color { color: var(--team1); }
   .team2-color { color: var(--team2); }
-  .score-display {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 64px;
-    letter-spacing: 2px;
-    text-align: center;
-    line-height: 1;
-  }
+  .score-display { font-family: 'Bebas Neue', sans-serif; font-size: 64px; letter-spacing: 2px; text-align: center; line-height: 1; }
   .score-sep { color: var(--text-muted); margin: 0 4px; }
-  .score-half {
-    display: flex;
-    justify-content: center;
-    gap: 32px;
-    margin-top: 8px;
-  }
-  .half-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .half-score {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
-    text-align: center;
-  }
+  .score-half { display: flex; justify-content: center; gap: 32px; margin-top: 8px; }
+  .half-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+  .half-score { font-family: 'Bebas Neue', sans-serif; font-size: 20px; text-align: center; }
   .half-block { text-align: center; }
 
-  /* SPECIAL SCORE */
   .special-score {
     background: var(--surface2);
     border-radius: 8px;
@@ -118,210 +92,215 @@
     gap: 8px;
     flex-wrap: wrap;
   }
-  .special-score .label {
-    font-size: 11px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .special-value {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    color: var(--accent1);
-  }
-  .special-formula {
-    font-size: 11px;
-    color: var(--text-muted);
-  }
+  .special-score .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+  .special-value { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--accent1); }
+  .special-formula { font-size: 11px; color: var(--text-muted); }
 
-  /* CLOCK */
-  .clock-section {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
+  .clock-section { display: flex; align-items: center; gap: 10px; justify-content: center; flex-wrap: wrap; }
   .clock-display {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 42px;
-    letter-spacing: 3px;
-    color: var(--accent1);
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 4px 20px;
-    min-width: 140px;
-    text-align: center;
-    cursor: pointer;
-    transition: background 0.2s;
+    font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 3px; color: var(--accent1);
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 4px 20px; min-width: 140px; text-align: center; cursor: pointer; transition: background 0.2s;
   }
   .clock-display:hover { background: var(--border); }
   .clock-edit {
-    display: none;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 42px;
-    letter-spacing: 3px;
-    color: var(--accent1);
-    background: var(--surface2);
-    border: 1px solid var(--accent1);
-    border-radius: 8px;
-    padding: 4px 20px;
-    width: 160px;
-    text-align: center;
-    outline: none;
+    display: none; font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 3px;
+    color: var(--accent1); background: var(--surface2); border: 1px solid var(--accent1);
+    border-radius: 8px; padding: 4px 20px; width: 160px; text-align: center; outline: none;
   }
+
   .btn {
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 600;
-    font-size: 13px;
+    padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 13px;
     transition: opacity 0.15s, transform 0.1s;
   }
   .btn:active { transform: scale(0.97); }
   .btn-start { background: var(--accent1); color: #000; }
   .btn-stop { background: var(--accent2); color: #fff; }
   .btn-reset { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
-  .half-btn {
-    padding: 6px 12px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 12px;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 600;
-    transition: all 0.2s;
-  }
-  .half-btn.active {
-    background: var(--accent1);
-    color: #000;
-    border-color: var(--accent1);
-  }
+  .btn-save { background: var(--green); color: #000; }
+  .btn-print { background: #7c5cff; color: #fff; }
+  .btn-new { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-danger { background: var(--accent2); color: #fff; }
 
-  /* TEAMS GRID */
-  .teams-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+  .half-btn {
+    padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--text-muted); cursor: pointer;
+    font-size: 12px; font-family: 'DM Sans', sans-serif; font-weight: 600; transition: all 0.2s;
   }
+  .half-btn.active { background: var(--accent1); color: #000; border-color: var(--accent1); }
+
+  .teams-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   @media (max-width: 700px) { .teams-grid { grid-template-columns: 1fr; } }
 
-  /* TEAM CARD */
-  .team-card {
+  .team-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .team-card-header { padding: 10px 14px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+  .team1-header { background: rgba(61,127,255,0.15); border-bottom: 2px solid var(--team1); color: var(--team1); }
+  .team2-header { background: rgba(255,107,53,0.15); border-bottom: 2px solid var(--team2); color: var(--team2); }
+
+  .player-table { width: 100%; border-collapse: collapse; }
+  .player-table th {
+    padding: 6px 8px; font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.8px; color: var(--text-muted); text-align: left;
+    background: var(--surface2); border-bottom: 1px solid var(--border);
+  }
+  .player-table th.center { text-align: center; }
+  .player-table td { padding: 4px 6px; border-bottom: 1px solid rgba(42,48,72,0.5); vertical-align: middle; }
+  .player-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .player-table tr:last-child td { border-bottom: none; }
+
+  .cell-input {
+    background: transparent; border: none; border-bottom: 1px solid transparent;
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px;
+    width: 100%; outline: none; padding: 2px 4px; transition: border-color 0.2s;
+  }
+  .cell-input:focus { border-bottom-color: var(--accent1); background: rgba(232,255,71,0.04); }
+  .cell-input.num { width: 36px; text-align: center; font-weight: 600; color: var(--text-muted); font-size: 12px; }
+  .cell-input.goals { width: 32px; text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--text); }
+  .cell-input.goals:focus { color: var(--accent1); }
+  .row-total { font-family: 'Bebas Neue', sans-serif; font-size: 18px; text-align: center; color: var(--green); min-width: 28px; display: block; }
+  .goal-cell { display: flex; align-items: center; justify-content: center; gap: 2px; }
+  .g-btn {
+    width: 22px; height: 22px; border-radius: 5px; border: none; cursor: pointer;
+    font-size: 15px; font-weight: 700; line-height: 1; display: flex; align-items: center; justify-content: center;
+    transition: transform 0.1s, opacity 0.15s; flex-shrink: 0;
+  }
+  .g-btn:active { transform: scale(0.88); }
+  .g-btn-plus { background: var(--accent1); color: #000; }
+  .g-btn-minus { background: var(--surface2); color: var(--accent2); border: 1px solid var(--accent2); }
+
+  .totals-row td { background: var(--surface2) !important; border-top: 2px solid var(--border) !important; font-weight: 600; font-size: 12px; color: var(--text-muted); padding: 6px 8px; }
+  .totals-row .total-val { font-family: 'Bebas Neue', sans-serif; font-size: 20px; text-align: center; display: block; }
+  .t1-val { color: var(--team1); }
+  .t2-val { color: var(--team2); }
+
+  /* HISTORY */
+  .history-section {
+    margin-top: 20px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
   }
-  .team-card-header {
-    padding: 10px 14px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 16px;
-    letter-spacing: 1px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .team1-header { background: rgba(61,127,255,0.15); border-bottom: 2px solid var(--team1); color: var(--team1); }
-  .team2-header { background: rgba(255,107,53,0.15); border-bottom: 2px solid var(--team2); color: var(--team2); }
-
-  /* PLAYER TABLE */
-  .player-table { width: 100%; border-collapse: collapse; }
-  .player-table th {
-    padding: 6px 8px;
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--text-muted);
-    text-align: left;
+  .history-header {
+    padding: 12px 16px;
     background: var(--surface2);
     border-bottom: 1px solid var(--border);
-  }
-  .player-table th.center { text-align: center; }
-  .player-table td {
-    padding: 4px 6px;
-    border-bottom: 1px solid rgba(42,48,72,0.5);
-    vertical-align: middle;
-  }
-  .player-table tr:hover td { background: rgba(255,255,255,0.02); }
-  .player-table tr:last-child td { border-bottom: none; }
-
-  .cell-input {
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid transparent;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    width: 100%;
-    outline: none;
-    padding: 2px 4px;
-    transition: border-color 0.2s;
-  }
-  .cell-input:focus { border-bottom-color: var(--accent1); background: rgba(232,255,71,0.04); }
-  .cell-input.num {
-    width: 36px;
-    text-align: center;
-    font-weight: 600;
-    color: var(--text-muted);
-    font-size: 12px;
-  }
-  .cell-input.goals {
-    width: 36px;
-    text-align: center;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 18px;
-    color: var(--text);
+    letter-spacing: 1px;
+    color: var(--accent1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
-  .cell-input.goals:focus { color: var(--accent1); }
+  .history-empty { padding: 20px; text-align: center; color: var(--text-muted); font-size: 13px; }
+  .history-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .history-item:hover { background: var(--surface2); }
+  .history-item:last-child { border-bottom: none; }
+  .history-date { font-size: 11px; color: var(--text-muted); }
+  .history-teams { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px; }
+  .history-score { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--accent1); }
+  .history-actions { display: flex; gap: 6px; }
+  .btn-sm { padding: 5px 10px; font-size: 11px; border-radius: 6px; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 600; }
+  .btn-sm-load { background: var(--team1); color: #fff; }
+  .btn-sm-print { background: #7c5cff; color: #fff; }
+  .btn-sm-del { background: var(--surface2); color: var(--accent2); border: 1px solid var(--accent2); }
 
-  .row-total {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    text-align: center;
-    color: var(--green);
-    min-width: 28px;
-    display: block;
+  /* MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7); z-index: 1000;
+    align-items: center; justify-content: center;
   }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    max-width: 360px;
+    width: 90%;
+    text-align: center;
+  }
+  .modal h3 { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; margin-bottom: 8px; color: var(--accent1); }
+  .modal p { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
+  .modal-input {
+    width: 100%; padding: 10px 12px; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 8px; color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none;
+    margin-bottom: 16px;
+  }
+  .modal-input:focus { border-color: var(--accent1); }
+  .modal-btns { display: flex; gap: 8px; justify-content: center; }
 
-  /* TOTALS ROW */
-  .totals-row td {
-    background: var(--surface2) !important;
-    border-top: 2px solid var(--border) !important;
-    font-weight: 600;
-    font-size: 12px;
-    color: var(--text-muted);
-    padding: 6px 8px;
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--green); color: #000; padding: 10px 24px;
+    border-radius: 99px; font-weight: 600; font-size: 13px;
+    opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 9999;
   }
-  .totals-row .total-val {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
-    text-align: center;
-    display: block;
+  .toast.show { opacity: 1; }
+
+  /* PRINT STYLES */
+  @media print {
+    body { background: #fff !important; color: #000 !important; padding: 8px; font-size: 12px; }
+    .no-print { display: none !important; }
+    .print-only { display: block !important; }
+    .scoreboard, .team-card, .history-section { border: 1px solid #ccc !important; background: #fff !important; }
+    .team-card-header { background: #f0f0f0 !important; color: #000 !important; }
+    .score-display { font-size: 40px !important; color: #000 !important; }
+    .team1-color, .team2-color, .team-name-edit { color: #000 !important; }
+    .half-score, .special-value, .row-total, .total-val { color: #000 !important; }
+    .special-score { background: #f5f5f5 !important; }
+    .player-table th { background: #f0f0f0 !important; color: #000 !important; }
+    .player-table td { border-bottom: 1px solid #eee !important; }
+    .totals-row td { background: #f0f0f0 !important; }
+    .cell-input { color: #000 !important; border-bottom-color: #ccc !important; }
+    .teams-grid { grid-template-columns: 1fr 1fr !important; }
+    .history-section { display: none !important; }
+    .surface2 { background: #f5f5f5 !important; }
+    .half-label, .special-formula, .label { color: #666 !important; }
+    .score-sep { color: #666 !important; }
+    .print-title { display: block !important; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; margin-bottom: 12px; text-align: center; }
+    .print-date { display: block !important; font-size: 11px; color: #666; text-align: center; margin-bottom: 16px; }
   }
-  .t1-val { color: var(--team1); }
-  .t2-val { color: var(--team2); }
+  .print-title, .print-date { display: none; }
 </style>
 </head>
 <body>
 
-<div class="header">
+<div class="print-title" id="printTitle">Spielbericht</div>
+<div class="print-date" id="printDate"></div>
+
+<div class="header no-print">
   <div class="app-title">⚽ Spielbericht</div>
-  <div class="clock-section">
-    <button class="half-btn" id="halfBtn1" onclick="setHalf(1)">1. HZ</button>
-    <button class="half-btn" id="halfBtn2" onclick="setHalf(2)">2. HZ</button>
-    <div class="clock-display" id="clockDisplay" onclick="editClock()">00:00</div>
-    <input class="clock-edit" id="clockEdit" type="text" placeholder="MM:SS" onblur="saveClock()" onkeydown="if(event.key==='Enter')saveClock()">
-    <button class="btn btn-start" onclick="startClock()">▶ Start</button>
-    <button class="btn btn-stop" onclick="stopClock()">■ Stop</button>
-    <button class="btn btn-reset" onclick="resetClock()">↺</button>
+  <div class="top-actions">
+    <button class="btn btn-save" onclick="saveGame()">💾 Spiel speichern</button>
+    <button class="btn btn-print" onclick="printReport()">🖨️ Drucken / PDF</button>
+    <button class="btn btn-new" onclick="newGame()">＋ Neues Spiel</button>
   </div>
+</div>
+
+<div class="clock-section no-print" style="margin-bottom:16px;">
+  <button class="half-btn" id="halfBtn1" onclick="setHalf(1)">1. HZ</button>
+  <button class="half-btn" id="halfBtn2" onclick="setHalf(2)">2. HZ</button>
+  <div class="clock-display" id="clockDisplay" onclick="editClock()">00:00</div>
+  <input class="clock-edit" id="clockEdit" type="text" placeholder="MM:SS" onblur="saveClock()" onkeydown="if(event.key==='Enter')saveClock()">
+  <button class="btn btn-start" onclick="startClock()">▶ Start</button>
+  <button class="btn btn-stop" onclick="stopClock()">■ Stop</button>
+  <button class="btn btn-reset" onclick="resetClock()">↺</button>
 </div>
 
 <!-- SCOREBOARD -->
@@ -351,7 +330,6 @@
       <input class="team-name-edit team2-color" id="team2Name" type="text" value="Team B" oninput="updateAll()">
     </div>
   </div>
-
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
     <div class="special-score">
       <div>
@@ -368,84 +346,104 @@
       <div class="special-value" id="specialVal2">0</div>
     </div>
   </div>
+  <!-- Spielzeit im Druck -->
+  <div id="printClockRow" style="display:none; margin-top:10px; text-align:center; font-family:'Bebas Neue',sans-serif; font-size:18px; color:#666;">
+    Spielzeit: <span id="printClockVal">00:00</span>
+  </div>
 </div>
 
 <!-- TEAMS -->
 <div class="teams-grid">
-  <!-- TEAM 1 -->
   <div class="team-card">
-    <div class="team-card-header team1-header">
-      🔵 <span id="t1HeaderName">Team A</span>
-    </div>
-    <table class="player-table" id="table1"></table>
+    <div class="team-card-header team1-header">🔵 <span id="t1HeaderName">Team A</span></div>
+    <table class="player-table" id="table0"></table>
   </div>
-  <!-- TEAM 2 -->
   <div class="team-card">
-    <div class="team-card-header team2-header">
-      🟠 <span id="t2HeaderName">Team B</span>
-    </div>
-    <table class="player-table" id="table2"></table>
+    <div class="team-card-header team2-header">🟠 <span id="t2HeaderName">Team B</span></div>
+    <table class="player-table" id="table1"></table>
   </div>
 </div>
 
+<!-- HISTORY -->
+<div class="history-section no-print">
+  <div class="history-header">
+    📋 Spielhistorie
+    <span id="historyCount" style="font-size:13px;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-weight:400;">0 Spiele</span>
+  </div>
+  <div id="historyList"><div class="history-empty">Noch keine gespeicherten Spiele.</div></div>
+</div>
+
+<!-- MODAL: Spielname -->
+<div class="modal-overlay" id="saveModal">
+  <div class="modal">
+    <h3>Spiel speichern</h3>
+    <p>Gib einen Namen für dieses Spiel ein (z.B. Datum oder Turnier):</p>
+    <input class="modal-input" id="gameNameInput" type="text" placeholder="z.B. 01.03.2026 – Turnier A">
+    <div class="modal-btns">
+      <button class="btn btn-save" onclick="confirmSave()">💾 Speichern</button>
+      <button class="btn btn-reset" onclick="closeModal('saveModal')">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Neues Spiel -->
+<div class="modal-overlay" id="newModal">
+  <div class="modal">
+    <h3>Neues Spiel</h3>
+    <p>Aktuelles Spiel wird geleert. Hast du es bereits gespeichert?</p>
+    <div class="modal-btns">
+      <button class="btn btn-danger" onclick="confirmNew()">Ja, neues Spiel starten</button>
+      <button class="btn btn-reset" onclick="closeModal('newModal')">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
 <script>
-// ── State ──────────────────────────────────────────────────────────────────
 const PLAYERS = 16;
 let teams = [
-  { name: 'Team A', players: Array.from({length:PLAYERS},(_,i)=>({num:'',name:'',h1:0,h2:0})) },
-  { name: 'Team B', players: Array.from({length:PLAYERS},(_,i)=>({num:'',name:'',h1:0,h2:0})) }
+  { name: 'Team A', players: Array.from({length:PLAYERS},()=>({num:'',name:'',h1:0,h2:0})) },
+  { name: 'Team B', players: Array.from({length:PLAYERS},()=>({num:'',name:'',h1:0,h2:0})) }
 ];
+let seconds = 0, clockInterval = null, currentHalf = 1;
+let history = JSON.parse(localStorage.getItem('spielhistorie') || '[]');
 
 // ── Clock ──────────────────────────────────────────────────────────────────
-let seconds = 0, clockInterval = null, currentHalf = 1;
-
 function pad(n){return String(n).padStart(2,'0');}
-function clockStr(s){ return pad(Math.floor(s/60))+':'+pad(s%60); }
-function renderClock(){ document.getElementById('clockDisplay').textContent = clockStr(seconds); }
-
-function startClock(){
-  if(clockInterval) return;
-  clockInterval = setInterval(()=>{ seconds++; renderClock(); }, 1000);
-}
-function stopClock(){
-  clearInterval(clockInterval); clockInterval = null;
-}
-function resetClock(){
-  stopClock(); seconds = 0; renderClock();
-}
+function clockStr(s){return pad(Math.floor(s/60))+':'+pad(s%60);}
+function renderClock(){document.getElementById('clockDisplay').textContent=clockStr(seconds);}
+function startClock(){if(clockInterval)return;clockInterval=setInterval(()=>{seconds++;renderClock();},1000);}
+function stopClock(){clearInterval(clockInterval);clockInterval=null;}
+function resetClock(){stopClock();seconds=0;renderClock();}
 function editClock(){
   stopClock();
-  let d = document.getElementById('clockDisplay');
-  let e = document.getElementById('clockEdit');
-  d.style.display='none'; e.style.display='block';
-  e.value = clockStr(seconds); e.focus(); e.select();
+  document.getElementById('clockDisplay').style.display='none';
+  let e=document.getElementById('clockEdit');
+  e.style.display='block';e.value=clockStr(seconds);e.focus();e.select();
 }
 function saveClock(){
-  let e = document.getElementById('clockEdit');
-  let parts = e.value.split(':');
-  if(parts.length===2){
-    let m=parseInt(parts[0])||0, s=parseInt(parts[1])||0;
-    seconds = m*60+s;
-  }
+  let e=document.getElementById('clockEdit'),parts=e.value.split(':');
+  if(parts.length===2){seconds=(parseInt(parts[0])||0)*60+(parseInt(parts[1])||0);}
   document.getElementById('clockDisplay').style.display='';
-  e.style.display='none';
-  renderClock();
+  e.style.display='none';renderClock();
 }
 function setHalf(h){
-  currentHalf = h;
-  document.getElementById('halfBtn1').classList.toggle('active', h===1);
-  document.getElementById('halfBtn2').classList.toggle('active', h===2);
+  currentHalf=h;
+  document.getElementById('halfBtn1').classList.toggle('active',h===1);
+  document.getElementById('halfBtn2').classList.toggle('active',h===2);
 }
 
 // ── Build Tables ────────────────────────────────────────────────────────────
-function buildTable(ti) {
-  const table = document.getElementById('table'+('12'[ti]));
-  table.innerHTML = `
+function buildTable(ti){
+  const table=document.getElementById('table'+ti);
+  table.innerHTML=`
     <thead><tr>
       <th style="width:36px" class="center">#</th>
       <th>Name</th>
-      <th class="center" style="width:38px">1.HZ</th>
-      <th class="center" style="width:38px">2.HZ</th>
+      <th class="center" style="width:80px">1.HZ</th>
+      <th class="center" style="width:80px">2.HZ</th>
       <th class="center" style="width:38px">Ges.</th>
     </tr></thead><tbody id="tbody${ti}"></tbody>
     <tfoot><tr class="totals-row">
@@ -453,70 +451,203 @@ function buildTable(ti) {
       <td><span class="total-val ${ti===0?'t1-val':'t2-val'}" id="tot${ti}_h1">0</span></td>
       <td><span class="total-val ${ti===0?'t1-val':'t2-val'}" id="tot${ti}_h2">0</span></td>
       <td><span class="total-val ${ti===0?'t1-val':'t2-val'}" id="tot${ti}_total">0</span></td>
-    </tr></tfoot>
-  `;
-  const tbody = document.getElementById('tbody'+ti);
-  teams[ti].players.forEach((p, pi) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
+    </tr></tfoot>`;
+  const tbody=document.getElementById('tbody'+ti);
+  teams[ti].players.forEach((p,pi)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
       <td><input class="cell-input num" type="text" value="${p.num}" placeholder="##"
         oninput="teams[${ti}].players[${pi}].num=this.value;updateAll()"></td>
       <td><input class="cell-input" type="text" value="${p.name}" placeholder="Vorname"
         oninput="teams[${ti}].players[${pi}].name=this.value;updateAll()"></td>
-      <td><input class="cell-input goals" type="number" min="0" value="${p.h1||''}" placeholder="0"
-        oninput="teams[${ti}].players[${pi}].h1=parseInt(this.value)||0;updateAll()"></td>
-      <td><input class="cell-input goals" type="number" min="0" value="${p.h2||''}" placeholder="0"
-        oninput="teams[${ti}].players[${pi}].h2=parseInt(this.value)||0;updateAll()"></td>
-      <td><span class="row-total" id="rowTotal_${ti}_${pi}">0</span></td>
-    `;
+      <td>
+        <div class="goal-cell">
+          <button class="g-btn g-btn-minus" onclick="changeGoal(${ti},${pi},'h1',-1)">−</button>
+          <input class="cell-input goals" type="number" min="0" value="${p.h1||''}" placeholder="0"
+            oninput="teams[${ti}].players[${pi}].h1=parseInt(this.value)||0;updateAll()" id="g_${ti}_${pi}_h1">
+          <button class="g-btn g-btn-plus" onclick="changeGoal(${ti},${pi},'h1',1)">+</button>
+        </div>
+      </td>
+      <td>
+        <div class="goal-cell">
+          <button class="g-btn g-btn-minus" onclick="changeGoal(${ti},${pi},'h2',-1)">−</button>
+          <input class="cell-input goals" type="number" min="0" value="${p.h2||''}" placeholder="0"
+            oninput="teams[${ti}].players[${pi}].h2=parseInt(this.value)||0;updateAll()" id="g_${ti}_${pi}_h2">
+          <button class="g-btn g-btn-plus" onclick="changeGoal(${ti},${pi},'h2',1)">+</button>
+        </div>
+      </td>
+      <td><span class="row-total" id="rowTotal_${ti}_${pi}">0</span></td>`;
     tbody.appendChild(tr);
   });
 }
 
+// ── +/- Goal Buttons ────────────────────────────────────────────────────────
+function changeGoal(ti, pi, half, delta){
+  const p = teams[ti].players[pi];
+  p[half] = Math.max(0, (p[half]||0) + delta);
+  const inp = document.getElementById(`g_${ti}_${pi}_${half}`);
+  if(inp) inp.value = p[half] || '';
+  updateAll();
+}
+
 // ── Update All ───────────────────────────────────────────────────────────────
 function updateAll(){
-  // Sync names
-  teams[0].name = document.getElementById('team1Name').value;
-  teams[1].name = document.getElementById('team2Name').value;
-  document.getElementById('t1HeaderName').textContent = teams[0].name;
-  document.getElementById('t2HeaderName').textContent = teams[1].name;
-  document.getElementById('specialLabel1').textContent = teams[0].name + ' – Sonderwertung';
-  document.getElementById('specialLabel2').textContent = teams[1].name + ' – Sonderwertung';
+  teams[0].name=document.getElementById('team1Name').value;
+  teams[1].name=document.getElementById('team2Name').value;
+  ['t1HeaderName','t2HeaderName'].forEach((id,i)=>document.getElementById(id).textContent=teams[i].name);
+  document.getElementById('specialLabel1').textContent=teams[0].name+' – Sonderwertung';
+  document.getElementById('specialLabel2').textContent=teams[1].name+' – Sonderwertung';
 
-  let scores = [0,0,0,0]; // h1t0, h1t1, h2t0, h2t1
+  let scores=[0,0,0,0];
   for(let ti=0;ti<2;ti++){
     let h1=0,h2=0,scorers=0;
     teams[ti].players.forEach((p,pi)=>{
-      const total = p.h1 + p.h2;
-      const el = document.getElementById(`rowTotal_${ti}_${pi}`);
-      if(el) el.textContent = total;
-      h1 += p.h1; h2 += p.h2;
-      if(total > 0) scorers++;
+      const total=p.h1+p.h2;
+      const el=document.getElementById(`rowTotal_${ti}_${pi}`);
+      if(el)el.textContent=total;
+      h1+=p.h1;h2+=p.h2;
+      if(total>0)scorers++;
     });
-    // totals footer
-    document.getElementById(`tot${ti}_h1`).textContent = h1;
-    document.getElementById(`tot${ti}_h2`).textContent = h2;
-    document.getElementById(`tot${ti}_total`).textContent = h1+h2;
-    // special
-    document.getElementById(`specialVal${ti+1}`).textContent = scorers * (h1+h2);
-    // scores array
-    if(ti===0){ scores[0]=h1; scores[2]=h2; }
-    else { scores[1]=h1; scores[3]=h2; }
+    document.getElementById(`tot${ti}_h1`).textContent=h1;
+    document.getElementById(`tot${ti}_h2`).textContent=h2;
+    document.getElementById(`tot${ti}_total`).textContent=h1+h2;
+    document.getElementById(`specialVal${ti+1}`).textContent=scorers*(h1+h2);
+    if(ti===0){scores[0]=h1;scores[2]=h2;}else{scores[1]=h1;scores[3]=h2;}
   }
-  document.getElementById('half1Score1').textContent = scores[0];
-  document.getElementById('half1Score2').textContent = scores[1];
-  document.getElementById('half2Score1').textContent = scores[2];
-  document.getElementById('half2Score2').textContent = scores[3];
-  document.getElementById('totalScore1').textContent = scores[0]+scores[2];
-  document.getElementById('totalScore2').textContent = scores[1]+scores[3];
+  document.getElementById('half1Score1').textContent=scores[0];
+  document.getElementById('half1Score2').textContent=scores[1];
+  document.getElementById('half2Score1').textContent=scores[2];
+  document.getElementById('half2Score2').textContent=scores[3];
+  document.getElementById('totalScore1').textContent=scores[0]+scores[2];
+  document.getElementById('totalScore2').textContent=scores[1]+scores[3];
+}
+
+// ── Save / History ──────────────────────────────────────────────────────────
+function saveGame(){
+  document.getElementById('gameNameInput').value=
+    new Date().toLocaleDateString('de-DE')+' – '+teams[0].name+' vs '+teams[1].name;
+  openModal('saveModal');
+  setTimeout(()=>document.getElementById('gameNameInput').select(),100);
+}
+
+function confirmSave(){
+  const name=document.getElementById('gameNameInput').value.trim()||'Spiel ohne Namen';
+  const entry={
+    id: Date.now(),
+    name,
+    date: new Date().toLocaleString('de-DE'),
+    teams: JSON.parse(JSON.stringify(teams)),
+    seconds,
+    half: currentHalf,
+    score: {
+      h1: [parseInt(document.getElementById('half1Score1').textContent),parseInt(document.getElementById('half1Score2').textContent)],
+      h2: [parseInt(document.getElementById('half2Score1').textContent),parseInt(document.getElementById('half2Score2').textContent)],
+      total: [parseInt(document.getElementById('totalScore1').textContent),parseInt(document.getElementById('totalScore2').textContent)]
+    }
+  };
+  history.unshift(entry);
+  localStorage.setItem('spielhistorie', JSON.stringify(history));
+  closeModal('saveModal');
+  renderHistory();
+  showToast('✅ Spiel gespeichert!');
+}
+
+function renderHistory(){
+  const list=document.getElementById('historyList');
+  document.getElementById('historyCount').textContent=history.length+' Spiel'+(history.length!==1?'e':'');
+  if(history.length===0){list.innerHTML='<div class="history-empty">Noch keine gespeicherten Spiele.</div>';return;}
+  list.innerHTML=history.map(e=>`
+    <div class="history-item">
+      <div>
+        <div class="history-teams">${e.teams[0].name} vs ${e.teams[1].name}</div>
+        <div class="history-date">${e.name} · ${e.date}</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">
+          1.HZ: ${e.score.h1[0]}:${e.score.h1[1]} · 2.HZ: ${e.score.h2[0]}:${e.score.h2[1]}
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="history-score">${e.score.total[0]} : ${e.score.total[1]}</div>
+        <div class="history-actions">
+          <button class="btn-sm btn-sm-load" onclick="loadGame(${e.id})">Laden</button>
+          <button class="btn-sm btn-sm-print" onclick="printGame(${e.id})">🖨️</button>
+          <button class="btn-sm btn-sm-del" onclick="deleteGame(${e.id})">✕</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function loadGame(id){
+  const entry=history.find(e=>e.id===id);
+  if(!entry)return;
+  stopClock();
+  teams=JSON.parse(JSON.stringify(entry.teams));
+  seconds=entry.seconds||0;
+  currentHalf=entry.half||1;
+  document.getElementById('team1Name').value=teams[0].name;
+  document.getElementById('team2Name').value=teams[1].name;
+  buildTable(0);buildTable(1);
+  setHalf(currentHalf);renderClock();updateAll();
+  showToast('📂 Spiel geladen!');
+}
+
+function deleteGame(id){
+  if(!confirm('Spiel wirklich löschen?'))return;
+  history=history.filter(e=>e.id!==id);
+  localStorage.setItem('spielhistorie',JSON.stringify(history));
+  renderHistory();
+  showToast('🗑️ Spiel gelöscht');
+}
+
+function printGame(id){
+  const entry=history.find(e=>e.id===id);
+  if(!entry)return;
+  loadGame(id);
+  setTimeout(()=>printReport(),300);
+}
+
+// ── Print ───────────────────────────────────────────────────────────────────
+function printReport(){
+  stopClock();
+  document.getElementById('printTitle').textContent=
+    teams[0].name+' vs '+teams[1].name;
+  document.getElementById('printDate').textContent=
+    'Erstellt am: '+new Date().toLocaleString('de-DE');
+  document.getElementById('printClockRow').style.display='block';
+  document.getElementById('printClockVal').textContent=clockStr(seconds);
+  window.print();
+  document.getElementById('printClockRow').style.display='none';
+}
+
+// ── New Game ────────────────────────────────────────────────────────────────
+function newGame(){ openModal('newModal'); }
+function confirmNew(){
+  stopClock();seconds=0;renderClock();currentHalf=1;
+  teams=[
+    {name:'Team A',players:Array.from({length:PLAYERS},()=>({num:'',name:'',h1:0,h2:0}))},
+    {name:'Team B',players:Array.from({length:PLAYERS},()=>({num:'',name:'',h1:0,h2:0}))}
+  ];
+  document.getElementById('team1Name').value='Team A';
+  document.getElementById('team2Name').value='Team B';
+  buildTable(0);buildTable(1);
+  setHalf(1);updateAll();
+  closeModal('newModal');
+  showToast('✨ Neues Spiel gestartet!');
+}
+
+// ── Modal / Toast ───────────────────────────────────────────────────────────
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2500);
 }
 
 // ── Init ────────────────────────────────────────────────────────────────────
-buildTable(0);
-buildTable(1);
-setHalf(1);
-renderClock();
-updateAll();
+buildTable(0);buildTable(1);
+setHalf(1);renderClock();updateAll();renderHistory();
 </script>
 </body>
 </html>
