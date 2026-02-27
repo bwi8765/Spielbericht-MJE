@@ -95,6 +95,7 @@
   .special-score .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
   .special-value { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--accent1); }
   .special-formula { font-size: 11px; color: var(--text-muted); }
+  .special-breakdown { font-family: 'Bebas Neue', sans-serif; font-size: 15px; color: var(--text-muted); margin-top: 2px; letter-spacing: 1px; }
 
   .clock-section { display: flex; align-items: center; gap: 10px; justify-content: center; flex-wrap: wrap; }
   .clock-display {
@@ -255,26 +256,42 @@
 
   /* PRINT STYLES */
   @media print {
-    body { background: #fff !important; color: #000 !important; padding: 8px; font-size: 12px; }
+    body { background: #fff !important; color: #000 !important; padding: 6px; font-size: 9px; }
     .no-print { display: none !important; }
     .print-only { display: block !important; }
-    .scoreboard, .team-card, .history-section { border: 1px solid #ccc !important; background: #fff !important; }
-    .team-card-header { background: #f0f0f0 !important; color: #000 !important; }
-    .score-display { font-size: 40px !important; color: #000 !important; }
+    .scoreboard, .team-card { border: 1px solid #ccc !important; background: #fff !important; }
+    .team-card-header { background: #f0f0f0 !important; color: #000 !important; font-size: 13px !important; padding: 6px 10px !important; }
+    .score-display { font-size: 36px !important; color: #000 !important; }
     .team1-color, .team2-color, .team-name-edit { color: #000 !important; }
     .half-score, .special-value, .row-total, .total-val { color: #000 !important; }
-    .special-score { background: #f5f5f5 !important; }
-    .player-table th { background: #f0f0f0 !important; color: #000 !important; }
-    .player-table td { border-bottom: 1px solid #eee !important; }
-    .totals-row td { background: #f0f0f0 !important; }
-    .cell-input { color: #000 !important; border-bottom-color: #ccc !important; }
-    .teams-grid { grid-template-columns: 1fr 1fr !important; }
+    .special-breakdown { color: #444 !important; font-size: 12px !important; }
+    .special-score { background: #f5f5f5 !important; padding: 6px 10px !important; }
     .history-section { display: none !important; }
     .surface2 { background: #f5f5f5 !important; }
     .half-label, .special-formula, .label { color: #666 !important; }
     .score-sep { color: #666 !important; }
-    .print-title { display: block !important; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; margin-bottom: 12px; text-align: center; }
-    .print-date { display: block !important; font-size: 11px; color: #666; text-align: center; margin-bottom: 16px; }
+    .print-title { display: block !important; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; margin-bottom: 8px; text-align: center; }
+    .print-date { display: block !important; font-size: 10px; color: #666; text-align: center; margin-bottom: 12px; }
+    /* Teams side by side */
+    .teams-grid { grid-template-columns: 1fr 1fr !important; gap: 6px !important; }
+    /* Table layout: fixed so columns are controlled */
+    .player-table { table-layout: fixed; width: 100%; border-collapse: collapse; }
+    .player-table th { background: #f0f0f0 !important; color: #000 !important; font-size: 8px !important; padding: 3px 3px !important; }
+    .player-table td { border-bottom: 1px solid #eee !important; padding: 2px 3px !important; }
+    .totals-row td { background: #f0f0f0 !important; }
+    /* Column widths: # | Name (auto) | 1.HZ | 2.HZ | Ges. */
+    .player-table th:nth-child(1), .player-table td:nth-child(1) { width: 22px !important; }
+    .player-table th:nth-child(2), .player-table td:nth-child(2) { overflow: visible; white-space: normal; word-break: break-word; font-size: 9px !important; }
+    .player-table th:nth-child(3), .player-table td:nth-child(3),
+    .player-table th:nth-child(4), .player-table td:nth-child(4),
+    .player-table th:nth-child(5), .player-table td:nth-child(5) { width: 36px !important; text-align: center; }
+    /* Hide +/- buttons in print, just show number */
+    .g-btn { display: none !important; }
+    .cell-input { color: #000 !important; font-size: 9px !important; width: 100% !important; }
+    .cell-input.goals { font-size: 11px !important; width: 20px !important; }
+    .row-total { font-size: 11px !important; }
+    .total-val { font-size: 13px !important; }
+    .team-card { page-break-inside: avoid; }
   }
   .print-title, .print-date { display: none; }
 </style>
@@ -335,6 +352,7 @@
       <div>
         <div class="label" id="specialLabel1">Team A – Sonderwertung</div>
         <div class="special-formula">Torschützen × Tore gesamt</div>
+        <div class="special-breakdown" id="specialBreak1">0 × 0</div>
       </div>
       <div class="special-value" id="specialVal1">0</div>
     </div>
@@ -342,6 +360,7 @@
       <div>
         <div class="label" id="specialLabel2">Team B – Sonderwertung</div>
         <div class="special-formula">Torschützen × Tore gesamt</div>
+        <div class="special-breakdown" id="specialBreak2">0 × 0</div>
       </div>
       <div class="special-value" id="specialVal2">0</div>
     </div>
@@ -512,6 +531,7 @@ function updateAll(){
     document.getElementById(`tot${ti}_h2`).textContent=h2;
     document.getElementById(`tot${ti}_total`).textContent=h1+h2;
     document.getElementById(`specialVal${ti+1}`).textContent=scorers*(h1+h2);
+    document.getElementById(`specialBreak${ti+1}`).textContent=scorers+' × '+(h1+h2);
     if(ti===0){scores[0]=h1;scores[2]=h2;}else{scores[1]=h1;scores[3]=h2;}
   }
   document.getElementById('half1Score1').textContent=scores[0];
