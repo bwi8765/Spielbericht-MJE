@@ -319,6 +319,16 @@
   <button class="btn btn-start" onclick="startClock()">▶ Start</button>
   <button class="btn btn-stop" onclick="stopClock()">■ Stop</button>
   <button class="btn btn-reset" onclick="resetClock()">↺</button>
+  <div style="display:flex;align-items:center;gap:6px;margin-left:8px;">
+    <span style="font-size:12px;color:var(--text-muted);font-weight:600;white-space:nowrap;">📅 Datum:</span>
+    <input type="text" id="gameDate" placeholder="TT.MM.JJJJ"
+      style="background:var(--surface);border:1px solid var(--border);border-radius:8px;
+             padding:6px 12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
+             color:var(--text);outline:none;width:130px;transition:border-color 0.2s;"
+      onfocus="this.style.borderColor='var(--accent1)'"
+      onblur="this.style.borderColor='var(--border)'"
+      oninput="gameDate=this.value">
+  </div>
 </div>
 
 <!-- SCOREBOARD -->
@@ -438,7 +448,7 @@ let teams = [
   { name: 'HSG HoSaWo', captain: '', players: Array.from({length:PLAYERS},()=>({num:'',name:'',h1:0,h2:0,tw:0})) },
   { name: 'Team B', captain: '', players: Array.from({length:PLAYERS},()=>({num:'',name:'',h1:0,h2:0})) }
 ];
-let seconds = 0, clockInterval = null, currentHalf = 1;
+let seconds = 0, clockInterval = null, currentHalf = 1, gameDate = '';
 let history = JSON.parse(localStorage.getItem('spielhistorie') || '[]');
 
 // ── Clock ──────────────────────────────────────────────────────────────────
@@ -627,6 +637,7 @@ function confirmSave(){
     id: Date.now(),
     name,
     date: new Date().toLocaleString('de-DE'),
+    gameDate: document.getElementById('gameDate').value,
     teams: JSON.parse(JSON.stringify(teams)),
     seconds,
     half: currentHalf,
@@ -677,6 +688,7 @@ function loadGame(id){
   document.getElementById('team1Name').value=teams[0].name;
   document.getElementById('team2Name').value=teams[1].name;
   document.getElementById('captainInput').value=teams[0].captain||'';
+  document.getElementById('gameDate').value=entry.gameDate||'';
   buildTable(0);buildTable(1);
   setHalf(currentHalf);renderClock();updateAll();
   showToast('📂 Spiel geladen!');
@@ -701,8 +713,9 @@ function printGame(id){
 function printReport(){
   stopClock();
   const cap=teams[0].captain?'  |  Kapitän: '+teams[0].captain:'';
+  const dat=document.getElementById('gameDate').value?' |  '+document.getElementById('gameDate').value:'';
   document.getElementById('printTitle').textContent=
-    teams[0].name+' vs '+teams[1].name+cap;
+    teams[0].name+' vs '+teams[1].name+cap+dat;
   document.getElementById('printDate').textContent=
     'Erstellt am: '+new Date().toLocaleString('de-DE');
   document.getElementById('printClockRow').style.display='block';
@@ -722,6 +735,7 @@ function confirmNew(){
   document.getElementById('team1Name').value='HSG HoSaWo';
   document.getElementById('team2Name').value='Team B';
   document.getElementById('captainInput').value='';
+  document.getElementById('gameDate').value='';
   buildTable(0);buildTable(1);
   setHalf(1);updateAll();
   closeModal('newModal');
