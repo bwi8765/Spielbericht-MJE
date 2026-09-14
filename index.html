@@ -375,16 +375,16 @@
 <!-- TEAMS -->
 <div class="teams-grid">
   <div class="team-card">
-    <div class="team-card-header team1-header" style="flex-direction:column;align-items:flex-start;gap:6px;">
+    <div class="team-card-header team1-header" style="justify-content:space-between;flex-wrap:wrap;gap:6px;">
       <div style="display:flex;align-items:center;gap:8px;">🔵 <span id="t1HeaderName">HSG HoSaWo</span></div>
-      <div style="display:flex;align-items:center;gap:8px;width:100%;">
+      <div style="display:flex;align-items:center;gap:6px;">
         <span style="font-size:12px;letter-spacing:.5px;white-space:nowrap;">Kapitän:</span>
-        <input type="text" id="captainInput" placeholder="Name des Kapitäns"
+        <input type="text" id="captainInput" placeholder="Name"
           value=""
           oninput="teams[0].captain=this.value"
           style="background:rgba(255,255,255,0.5);border:1px solid rgba(26,107,255,0.3);border-radius:6px;
                  padding:3px 8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
-                 color:#0d1120;outline:none;flex:1;min-width:0;">
+                 color:#0d1120;outline:none;width:130px;">
       </div>
     </div>
     <table class="player-table" id="table0"></table>
