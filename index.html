@@ -172,6 +172,7 @@
 
   .totals-row td { background: var(--surface2) !important; border-top: 2px solid var(--border) !important; font-weight: 600; font-size: 12px; color: var(--text-muted); padding: 6px 8px; }
   .totals-row .total-val { font-family: 'Bebas Neue', sans-serif; font-size: 20px; text-align: center; display: block; }
+  .quote-val { font-family: 'Bebas Neue', sans-serif; font-size: 15px; text-align: center; display: block; color: var(--text-muted); letter-spacing: .5px; }
   .t1-val { color: var(--team1); }
   .t2-val { color: var(--team2); }
 
@@ -324,7 +325,7 @@
 <div class="scoreboard">
   <div class="score-main">
     <div class="team-score-block">
-      <input class="team-name-edit team1-color" id="team1Name" type="text" value="Team A" oninput="updateAll()">
+      <input class="team-name-edit team1-color" id="team1Name" type="text" value="HSG HoSaWo" oninput="updateAll()">
     </div>
     <div>
       <div class="score-display">
@@ -374,7 +375,18 @@
 <!-- TEAMS -->
 <div class="teams-grid">
   <div class="team-card">
-    <div class="team-card-header team1-header">🔵 <span id="t1HeaderName">Team A</span></div>
+    <div class="team-card-header team1-header" style="flex-direction:column;align-items:flex-start;gap:6px;">
+      <div style="display:flex;align-items:center;gap:8px;">🔵 <span id="t1HeaderName">HSG HoSaWo</span></div>
+      <div style="display:flex;align-items:center;gap:8px;width:100%;">
+        <span style="font-size:12px;letter-spacing:.5px;white-space:nowrap;">Kapitän:</span>
+        <input type="text" id="captainInput" placeholder="Name des Kapitäns"
+          value=""
+          oninput="teams[0].captain=this.value"
+          style="background:rgba(255,255,255,0.5);border:1px solid rgba(26,107,255,0.3);border-radius:6px;
+                 padding:3px 8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+                 color:#0d1120;outline:none;flex:1;min-width:0;">
+      </div>
+    </div>
     <table class="player-table" id="table0"></table>
   </div>
   <div class="team-card">
@@ -423,8 +435,8 @@
 <script>
 const PLAYERS = 16;
 let teams = [
-  { name: 'Team A', players: Array.from({length:PLAYERS},()=>({num:'',name:'',h1:0,h2:0})) },
-  { name: 'Team B', players: Array.from({length:PLAYERS},()=>({num:'',name:'',h1:0,h2:0})) }
+  { name: 'HSG HoSaWo', captain: '', players: Array.from({length:PLAYERS},()=>({num:'',name:'',h1:0,h2:0,tw:0})) },
+  { name: 'Team B', captain: '', players: Array.from({length:PLAYERS},()=>({num:'',name:'',h1:0,h2:0})) }
 ];
 let seconds = 0, clockInterval = null, currentHalf = 1;
 let history = JSON.parse(localStorage.getItem('spielhistorie') || '[]');
@@ -457,28 +469,57 @@ function setHalf(h){
 // ── Build Tables ────────────────────────────────────────────────────────────
 function buildTable(ti){
   const table=document.getElementById('table'+ti);
+  const isHoSaWo = ti===0;
+  const extraCols = isHoSaWo
+    ? `<th class="center" style="width:80px">TW</th>`
+    : '';
+  const extraColsAfter = isHoSaWo
+    ? `<th class="center" style="width:48px">Quote</th>`
+    : '';
+  const extraFoot = isHoSaWo
+    ? `<td><span class="total-val t1-val" id="tot0_tw">0</span></td>`
+    : '';
+  const extraFootAfter = isHoSaWo
+    ? `<td><span class="total-val" style="color:var(--text-muted);font-size:14px;" id="tot0_quote">—</span></td>`
+    : '';
   table.innerHTML=`
     <thead><tr>
-      <th style="width:36px" class="center">#</th>
+      <th style="width:32px" class="center">#</th>
       <th>Name</th>
-      <th class="center" style="width:80px">1.HZ</th>
-      <th class="center" style="width:80px">2.HZ</th>
+      ${extraCols}
+      <th class="center" style="width:75px">1.HZ</th>
+      <th class="center" style="width:75px">2.HZ</th>
       <th class="center" style="width:38px">Ges.</th>
+      ${extraColsAfter}
     </tr></thead><tbody id="tbody${ti}"></tbody>
     <tfoot><tr class="totals-row">
       <td colspan="2" style="font-size:11px;letter-spacing:.5px;">GESAMT</td>
+      ${extraFoot}
       <td><span class="total-val ${ti===0?'t1-val':'t2-val'}" id="tot${ti}_h1">0</span></td>
       <td><span class="total-val ${ti===0?'t1-val':'t2-val'}" id="tot${ti}_h2">0</span></td>
       <td><span class="total-val ${ti===0?'t1-val':'t2-val'}" id="tot${ti}_total">0</span></td>
+      ${extraFootAfter}
     </tr></tfoot>`;
   const tbody=document.getElementById('tbody'+ti);
   teams[ti].players.forEach((p,pi)=>{
     const tr=document.createElement('tr');
+    const twCol = isHoSaWo ? `
+      <td>
+        <div class="goal-cell">
+          <button class="g-btn g-btn-minus" onclick="changeTW(${pi},-1)">−</button>
+          <input class="cell-input goals" type="number" min="0" value="${p.tw||''}" placeholder="0"
+            oninput="teams[0].players[${pi}].tw=parseInt(this.value)||0;updateAll()" id="tw_0_${pi}">
+          <button class="g-btn g-btn-plus" onclick="changeTW(${pi},1)">+</button>
+        </div>
+      </td>` : '';
+    const quoteCol = isHoSaWo ? `
+      <td><span class="quote-val" id="quote_0_${pi}">—</span></td>` : '';
     tr.innerHTML=`
       <td><input class="cell-input num" type="text" value="${p.num}" placeholder="##"
         oninput="teams[${ti}].players[${pi}].num=this.value;updateAll()"></td>
       <td><input class="cell-input" type="text" value="${p.name}" placeholder="Vorname"
         oninput="teams[${ti}].players[${pi}].name=this.value;updateAll()"></td>
+      ${twCol}
       <td>
         <div class="goal-cell">
           <button class="g-btn g-btn-minus" onclick="changeGoal(${ti},${pi},'h1',-1)">−</button>
@@ -495,7 +536,8 @@ function buildTable(ti){
           <button class="g-btn g-btn-plus" onclick="changeGoal(${ti},${pi},'h2',1)">+</button>
         </div>
       </td>
-      <td><span class="row-total" id="rowTotal_${ti}_${pi}">0</span></td>`;
+      <td><span class="row-total" id="rowTotal_${ti}_${pi}">0</span></td>
+      ${quoteCol}`;
     tbody.appendChild(tr);
   });
 }
@@ -509,30 +551,59 @@ function changeGoal(ti, pi, half, delta){
   updateAll();
 }
 
+function changeTW(pi, delta){
+  const p = teams[0].players[pi];
+  p.tw = Math.max(0, (p.tw||0) + delta);
+  const inp = document.getElementById(`tw_0_${pi}`);
+  if(inp) inp.value = p.tw || '';
+  updateAll();
+}
+
 // ── Update All ───────────────────────────────────────────────────────────────
 function updateAll(){
   teams[0].name=document.getElementById('team1Name').value;
   teams[1].name=document.getElementById('team2Name').value;
+  teams[0].captain=document.getElementById('captainInput').value;
   ['t1HeaderName','t2HeaderName'].forEach((id,i)=>document.getElementById(id).textContent=teams[i].name);
   document.getElementById('specialLabel1').textContent=teams[0].name+' – Sonderwertung';
   document.getElementById('specialLabel2').textContent=teams[1].name+' – Sonderwertung';
 
   let scores=[0,0,0,0];
   for(let ti=0;ti<2;ti++){
-    let h1=0,h2=0,scorers=0;
+    let h1=0,h2=0,scorers=0,totalTW=0;
     teams[ti].players.forEach((p,pi)=>{
       const total=p.h1+p.h2;
       const el=document.getElementById(`rowTotal_${ti}_${pi}`);
       if(el)el.textContent=total;
       h1+=p.h1;h2+=p.h2;
       if(total>0)scorers++;
+      // TW & Quote nur für Team 0 (HSG HoSaWo)
+      if(ti===0){
+        const tw=p.tw||0;
+        totalTW+=tw;
+        const qEl=document.getElementById(`quote_0_${pi}`);
+        if(qEl){
+          if(tw>0){ const q=Math.round((total/tw)*100); qEl.textContent=q+'%'; qEl.style.color=q>=50?'var(--green)':'var(--accent2)'; }
+          else { qEl.textContent='—'; qEl.style.color='var(--text-muted)'; }
+        }
+      }
     });
     document.getElementById(`tot${ti}_h1`).textContent=h1;
     document.getElementById(`tot${ti}_h2`).textContent=h2;
     document.getElementById(`tot${ti}_total`).textContent=h1+h2;
     document.getElementById(`specialVal${ti+1}`).textContent=scorers*(h1+h2);
     document.getElementById(`specialBreak${ti+1}`).textContent=scorers+' × '+(h1+h2);
-    if(ti===0){scores[0]=h1;scores[2]=h2;}else{scores[1]=h1;scores[3]=h2;}
+    if(ti===0){
+      scores[0]=h1;scores[2]=h2;
+      const twEl=document.getElementById('tot0_tw');
+      const qTotEl=document.getElementById('tot0_quote');
+      if(twEl) twEl.textContent=totalTW;
+      if(qTotEl){
+        const totalGoals=h1+h2;
+        if(totalTW>0){ const q=Math.round((totalGoals/totalTW)*100); qTotEl.textContent=q+'%'; qTotEl.style.color=q>=50?'var(--green)':'var(--accent2)'; }
+        else { qTotEl.textContent='—'; }
+      }
+    } else { scores[1]=h1;scores[3]=h2; }
   }
   document.getElementById('half1Score1').textContent=scores[0];
   document.getElementById('half1Score2').textContent=scores[1];
@@ -605,6 +676,7 @@ function loadGame(id){
   currentHalf=entry.half||1;
   document.getElementById('team1Name').value=teams[0].name;
   document.getElementById('team2Name').value=teams[1].name;
+  document.getElementById('captainInput').value=teams[0].captain||'';
   buildTable(0);buildTable(1);
   setHalf(currentHalf);renderClock();updateAll();
   showToast('📂 Spiel geladen!');
@@ -628,8 +700,9 @@ function printGame(id){
 // ── Print ───────────────────────────────────────────────────────────────────
 function printReport(){
   stopClock();
+  const cap=teams[0].captain?'  |  Kapitän: '+teams[0].captain:'';
   document.getElementById('printTitle').textContent=
-    teams[0].name+' vs '+teams[1].name;
+    teams[0].name+' vs '+teams[1].name+cap;
   document.getElementById('printDate').textContent=
     'Erstellt am: '+new Date().toLocaleString('de-DE');
   document.getElementById('printClockRow').style.display='block';
@@ -643,11 +716,12 @@ function newGame(){ openModal('newModal'); }
 function confirmNew(){
   stopClock();seconds=0;renderClock();currentHalf=1;
   teams=[
-    {name:'Team A',players:Array.from({length:PLAYERS},()=>({num:'',name:'',h1:0,h2:0}))},
-    {name:'Team B',players:Array.from({length:PLAYERS},()=>({num:'',name:'',h1:0,h2:0}))}
+    {name:'HSG HoSaWo',captain:'',players:Array.from({length:PLAYERS},()=>({num:'',name:'',h1:0,h2:0,tw:0}))},
+    {name:'Team B',captain:'',players:Array.from({length:PLAYERS},()=>({num:'',name:'',h1:0,h2:0}))}
   ];
-  document.getElementById('team1Name').value='Team A';
+  document.getElementById('team1Name').value='HSG HoSaWo';
   document.getElementById('team2Name').value='Team B';
+  document.getElementById('captainInput').value='';
   buildTable(0);buildTable(1);
   setHalf(1);updateAll();
   closeModal('newModal');
