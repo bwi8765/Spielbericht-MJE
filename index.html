@@ -172,7 +172,12 @@
 
   .totals-row td { background: var(--surface2) !important; border-top: 2px solid var(--border) !important; font-weight: 600; font-size: 12px; color: var(--text-muted); padding: 6px 8px; }
   .totals-row .total-val { font-family: 'Bebas Neue', sans-serif; font-size: 20px; text-align: center; display: block; }
-  .quote-val { font-family: 'Bebas Neue', sans-serif; font-size: 15px; text-align: center; display: block; color: var(--text-muted); letter-spacing: .5px; }
+  .col-tw { background: rgba(0, 160, 100, 0.09) !important; }
+  .col-h1 { background: rgba(26, 107, 255, 0.09) !important; }
+  .col-h2 { background: rgba(232, 90, 26, 0.09) !important; }
+  .player-table th.col-tw { background: rgba(0, 160, 100, 0.20) !important; color: #007a4d !important; }
+  .player-table th.col-h1 { background: rgba(26, 107, 255, 0.20) !important; color: #1a5ccc !important; }
+  .player-table th.col-h2 { background: rgba(232, 90, 26, 0.20) !important; color: #bb4a10 !important; }
   .t1-val { color: var(--team1); }
   .t2-val { color: var(--team2); }
 
@@ -481,32 +486,32 @@ function buildTable(ti){
   const table=document.getElementById('table'+ti);
   const isHoSaWo = ti===0;
   const extraCols = isHoSaWo
-    ? `<th class="center" style="width:80px">TW</th>`
+    ? `<th class="center col-tw" style="width:80px">TW</th>`
     : '';
   const extraColsAfter = isHoSaWo
-    ? `<th class="center" style="width:48px">Quote</th>`
+    ? `<th class="center col-tw" style="width:48px">Quote</th>`
     : '';
   const extraFoot = isHoSaWo
-    ? `<td><span class="total-val t1-val" id="tot0_tw">0</span></td>`
+    ? `<td class="col-tw"><span class="total-val t1-val" id="tot0_tw">0</span></td>`
     : '';
   const extraFootAfter = isHoSaWo
-    ? `<td><span class="total-val" style="color:var(--text-muted);font-size:14px;" id="tot0_quote">—</span></td>`
+    ? `<td class="col-tw"><span class="total-val" style="color:var(--text-muted);font-size:14px;" id="tot0_quote">—</span></td>`
     : '';
   table.innerHTML=`
     <thead><tr>
       <th style="width:32px" class="center">#</th>
       <th>Name</th>
       ${extraCols}
-      <th class="center" style="width:75px">1.HZ</th>
-      <th class="center" style="width:75px">2.HZ</th>
+      <th class="center col-h1" style="width:75px">1.HZ</th>
+      <th class="center col-h2" style="width:75px">2.HZ</th>
       <th class="center" style="width:38px">Ges.</th>
       ${extraColsAfter}
     </tr></thead><tbody id="tbody${ti}"></tbody>
     <tfoot><tr class="totals-row">
       <td colspan="2" style="font-size:11px;letter-spacing:.5px;">GESAMT</td>
       ${extraFoot}
-      <td><span class="total-val ${ti===0?'t1-val':'t2-val'}" id="tot${ti}_h1">0</span></td>
-      <td><span class="total-val ${ti===0?'t1-val':'t2-val'}" id="tot${ti}_h2">0</span></td>
+      <td class="col-h1"><span class="total-val ${ti===0?'t1-val':'t2-val'}" id="tot${ti}_h1">0</span></td>
+      <td class="col-h2"><span class="total-val ${ti===0?'t1-val':'t2-val'}" id="tot${ti}_h2">0</span></td>
       <td><span class="total-val ${ti===0?'t1-val':'t2-val'}" id="tot${ti}_total">0</span></td>
       ${extraFootAfter}
     </tr></tfoot>`;
@@ -514,7 +519,7 @@ function buildTable(ti){
   teams[ti].players.forEach((p,pi)=>{
     const tr=document.createElement('tr');
     const twCol = isHoSaWo ? `
-      <td>
+      <td class="col-tw">
         <div class="goal-cell">
           <button class="g-btn g-btn-minus" onclick="changeTW(${pi},-1)">−</button>
           <input class="cell-input goals" type="number" min="0" value="${p.tw||''}" placeholder="0"
@@ -523,14 +528,14 @@ function buildTable(ti){
         </div>
       </td>` : '';
     const quoteCol = isHoSaWo ? `
-      <td><span class="quote-val" id="quote_0_${pi}">—</span></td>` : '';
+      <td class="col-tw"><span class="quote-val" id="quote_0_${pi}">—</span></td>` : '';
     tr.innerHTML=`
       <td><input class="cell-input num" type="text" value="${p.num}" placeholder="##"
         oninput="teams[${ti}].players[${pi}].num=this.value;updateAll()"></td>
       <td><input class="cell-input" type="text" value="${p.name}" placeholder="Vorname"
         oninput="teams[${ti}].players[${pi}].name=this.value;updateAll()"></td>
       ${twCol}
-      <td>
+      <td class="col-h1">
         <div class="goal-cell">
           <button class="g-btn g-btn-minus" onclick="changeGoal(${ti},${pi},'h1',-1)">−</button>
           <input class="cell-input goals" type="number" min="0" value="${p.h1||''}" placeholder="0"
@@ -538,7 +543,7 @@ function buildTable(ti){
           <button class="g-btn g-btn-plus" onclick="changeGoal(${ti},${pi},'h1',1)">+</button>
         </div>
       </td>
-      <td>
+      <td class="col-h2">
         <div class="goal-cell">
           <button class="g-btn g-btn-minus" onclick="changeGoal(${ti},${pi},'h2',-1)">−</button>
           <input class="cell-input goals" type="number" min="0" value="${p.h2||''}" placeholder="0"
